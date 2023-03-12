@@ -1,0 +1,225 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+body {
+  background-color: #2d2929 !important;
+  font-family: "Nunito Sans", sans-serif;
+  user-select: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.loader {
+  display: block;
+  border: 10px solid lightgrey;
+  border-radius: 50%;
+  border-top: 10px solid rgb(207, 45, 12);
+  width: 45px !important;
+  height: 45px !important;
+  -webkit-animation: spin 1s linear infinite;
+  animation: spin 1s linear infinite;
+  margin: 5px auto 15px;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.header {
+  background-color: #b53e0b !important;
+  color: #d7cfcf;
+  padding: 20px;
+  box-shadow: inset -4px -4px 10px #ffffff70, inset 4px 4px 10px #00000070;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: 1.5rem;
+}
+
+.header h1 {
+  font-weight: bolder;
+  font-size: 1.5rem;
+  line-height: 50px;
+}
+
+.header h2 {
+  font-weight: bolder;
+  font-size: 1.3rem;
+  line-height: 30px;
+}
+
+#account {
+  float: right;
+  margin-right: 50px;
+  margin-left: 50px;
+
+  word-break: break-all;
+}
+
+button {
+  display: inline-block;
+  padding: 8px 12px;
+  background-color: #b53e0b;
+  margin: 5px !important;
+  border: none;
+  border-radius: 15px !important;
+  box-shadow: -2px -2px 3px #ffffff70, 2px 2px 3px #00000070;
+  color: rgb(24, 23, 23);
+}
+
+/* button header on click hover */
+button:hover {
+  background-color: #b53e0b;
+  box-shadow: inset -2px -2px 3px #ffffff70, inset 2px 2px 3px #00000070;
+}
+
+button:focus,
+button:active {
+  outline: none;
+  border: none;
+}
+
+/* input*/
+input {
+  display: inline-block;
+  padding: 8px 12px;
+  background-color: #b8b4b2;
+  margin: 5px !important;
+  border: none;
+  border-radius: 6px;
+  box-shadow: -2px -2px 3px #eb5b0870, 2px 2px 3px #00000070;
+  color: rgb(24, 23, 23);
+}
+
+input[type="text"] {
+  width: 450px;
+  font-size: 1.2rem;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+input[type="number"] {
+  min-width: 70px !important;
+}
+
+ol {
+  display: flex;
+  justify-content: center;
+}
+
+ol li {
+  display: list-item;
+  background: #b8b4b2 !important;
+  width: 70%;
+  margin: 0 auto;
+  margin-top: 10px;
+  font-size: 1.3rem;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  border-radius: 20px !important;
+}
+
+#proposals {
+  max-height: 210px;
+  overflow-y: scroll !important;
+}
+
+.post-section {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+.card-img-top {
+  border-radius: 12px !important;
+  width: 200px !important;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.card {
+  width: 80vw;
+  background-color: #ed642b !important;
+  margin-top: 5%;
+  color: #dad2d2;
+  border-radius: 12px !important;
+  text-align: left;
+  padding: 20px;
+  box-shadow: inset -4px -4px 10px #ffffff70, inset 4px 4px 10px #00000070;
+}
+
+.card-body {
+  max-height: 500px !important;
+}
+.card-title {
+  font-weight: bolder;
+  font-size: 1.5rem;
+  line-height: 50px;
+  color: #383434;
+}
+.card-text {
+  color: #252323;
+  font-size: 1.4rem;
+  line-height: 30px;
+  font-weight: bold;
+}
+.muted-text {
+  color: #000;
+}
+.card button {
+  padding: 8px 12px;
+  background-color: #ed642b;
+  margin-right: 2%;
+  border: none;
+  border-radius: 6px;
+  box-shadow: -2px -2px 3px #ffffff70, 2px 2px 3px #00000070;
+}
+.card button:hover {
+  background-color: #ed642b;
+  box-shadow: inset -2px -2px 3px #ffffff70, inset 2px 2px 3px #00000070;
+}
+.card button:focus,
+.card button:active {
+  outline: none;
+  border: none;
+}
+.card-buttons button:last-child {
+  float: right;
+  margin-right: 0%;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    color: white;
+    background: black;
+  }
+}

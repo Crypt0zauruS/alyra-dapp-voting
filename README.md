@@ -4,6 +4,14 @@ Bonjour cher correcteur,
 Cette dApp est une application de vote en ligne basée sur le smart contract de vote de notre formation.
 Nous avons utilisé **Truffle** pour le développement, le test et le déploiement du smart contract, ainsi que **NextJs** pour le développement de l'interface utilisateur avec la librairie **ethers**
 
+## Utilisation immédiate
+
+- Si vous voulez juste voir notre travail sans manipulations, rendez-vous sur le lien suivant :
+
+- L'application vous y attend déjà avec un contrat de vote déployé sur Goerli.
+- Il faudra nous contacter en nous envoyant votre adresse Goerli pour que nous puissions vous transférer le ownership du contrat de vote.
+- Sinon vous pouvez toujours visualiser la video de démonstration de l'application ici:
+
 ## Installation
 
 - Cloner le dépôt gitHub
@@ -54,10 +62,3 @@ $ npm run dev
 - Enjoy !
 
 - Si vous voulez déployer l'application sur une plateforme telle que netlify ou vercel, assurez-vous que le dossier de build est bien le dossier **voting** et non le dossier truffle ou le dossier racine.
-
-## Utilisation immédiate
-
-- Si vous voulez juste voir notre travail sans manipulations, rendez-vous sur le lien suivant :
-  https://voting-dapp-nextjs.vercel.app/
-- L'application vous y attend déjà avec un contrat de vote déployé sur Goerli.
-- Il faudra nous contacter en nous envoyant votre adresse Goerli pour que nous puissions vous transférer le ownership du contrat de vote.

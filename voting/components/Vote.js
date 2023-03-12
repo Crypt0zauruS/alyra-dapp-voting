@@ -88,6 +88,7 @@ const Vote = ({ showToast }) => {
     try {
       const provider = await getProviderOrSigner();
       const contractInstance = await getContractInstance(provider);
+      // query all proposals based on event name
       const allProposals = await contractInstance.queryFilter(
         contractInstance.filters.ProposalRegistered()
       );

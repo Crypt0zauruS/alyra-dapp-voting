@@ -13,6 +13,7 @@ export function useEth() {
   const [owner, setOwner] = useState("");
   const { abi, networks } = Voting;
   const [contractAddress, setContractAddress] = useState("");
+
   const getProviderOrSigner = async (needSigner = false) => {
     try {
       const provider = await web3ModalRef.current.connect();

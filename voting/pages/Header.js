@@ -14,6 +14,7 @@ const Header = () => {
     walletConnected,
     getWorkFlowStatus,
   } = useEthContext();
+
   const [voter, setVoter] = useState("");
   const [voterInfos, setVoterInfos] = useState([]);
   const [loader, setLoader] = useState(false);

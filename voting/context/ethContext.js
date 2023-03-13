@@ -128,6 +128,7 @@ export function useEth() {
   };
 }
 
+// function ETHProvider
 export function EthProvider({ children }) {
   const {
     connectWallet,

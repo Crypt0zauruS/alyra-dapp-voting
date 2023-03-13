@@ -40,6 +40,7 @@ export function useEth() {
     return new Contract(contractAddress, abi, providerOrSigner);
   };
 
+  // function to initialize informations in the the context
   const connectWallet = async () => {
     if (!walletConnected) {
       web3ModalRef.current = new Web3Modal({

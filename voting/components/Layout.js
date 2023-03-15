@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import Header from "../pages/Header";
+import Footer from "../pages/Footer";
 import NProgress from "nprogress";
 
 const Layout = ({ children }) => {
@@ -28,6 +29,7 @@ const Layout = ({ children }) => {
       </Head>
       <Header />
       {children}
+      <Footer/>
     </>
   );
 };

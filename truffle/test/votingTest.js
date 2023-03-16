@@ -44,13 +44,6 @@ contract("Voting", (accounts) => {
         newStatus: new BN(1),
       });
     });
-
-    it("should show winningProposalID equal to 0 at the beginning", async () => {
-      // On vérifie que winningProposalID est à 0
-      // const winningProposalID = await instance.winningProposalID(); est moins optimisé en gas
-      const winningProposalID = await instance.winningProposalID.call();
-      expect(winningProposalID).to.be.bignumber.equal(new BN(0));
-    });
   });
 
   /******************************* Check des changements d'état du Workflow ************************************/
@@ -137,7 +130,7 @@ contract("Voting", (accounts) => {
       await instance.addVoter(voter1, { from: owner });
       // On vérifie que l'owner ne peut pas vérifier les infos d'un votant
       await expectRevert(
-        instance.getVoter(voter1, { from: owner }),
+        instance.getVoter(voter1, { from: voter4 }),
         "You're not a voter"
       );
     });
@@ -235,7 +228,7 @@ contract("Voting", (accounts) => {
       await instance.addProposal.call("Proposal 1", { from: voter1 });
       // On vérifie que l'owner ne peut pas vérifier les infos d'une proposition
       await expectRevert(
-        instance.getOneProposal(1, { from: owner }),
+        instance.getOneProposal(1, { from: voter4 }),
         "You're not a voter"
       );
     });
@@ -419,8 +412,8 @@ contract("Voting", (accounts) => {
       // On termine la phase de vote
       await instance.endVotingSession({ from: owner });
       // On vérifie que la première proposition est gagnante
-      await instance.tallyVotes.call({ from: owner });
-      winningProposalID = await instance.winningProposalID.call();
+      await instance.tallyVotes({ from: owner });
+      winningProposalID = await instance.getWinningProposalID.call();
       assert.equal(winningProposalID, 0);
     });
 
@@ -430,8 +423,8 @@ contract("Voting", (accounts) => {
       // On termine la phase de vote
       await instance.endVotingSession({ from: owner });
       // On vérifie que la première proposition est gagnante
-      await instance.tallyVotes.call({ from: owner });
-      winningProposalID = await instance.winningProposalID.call();
+      await instance.tallyVotes({ from: owner });
+      winningProposalID = await instance.getWinningProposalID.call();
       assert.equal(winningProposalID, 0);
     });
   });

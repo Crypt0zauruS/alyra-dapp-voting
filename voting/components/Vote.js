@@ -73,7 +73,12 @@ const Vote = ({ showToast }) => {
     try {
       const provider = await getProviderOrSigner();
       const contractInstance = await getContractInstance(provider);
-      const winningProposal = await contractInstance.winningProposalID();
+      console.log("???????????????????????");
+      console.log(provider);
+      console.log(contractInstance);
+      const winningProposal = await contractInstance.getWinningProposalID();
+      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      console.log(winningProposal);
       const winningProposalInfo = await getOneProposal(winningProposal);
       setWinning(winningProposalInfo);
       setWinningIndex(winningProposal);

@@ -12,6 +12,7 @@ const Header = () => {
     account,
     owner,
     walletConnected,
+    walletInstalled,
     getWorkFlowStatus,
   } = useEthContext();
 
@@ -134,7 +135,7 @@ const Header = () => {
       {account && walletConnected && (
         <h1>Actuellement : {WFSarray[workflowStatus]}</h1>
       )}
-      {!account && walletConnected && <h1>Veuillez déverrouiller MetaMAsk</h1>}
+      {(!account && walletConnected && <h1>Veuillez déverrouiller MetaMAsk</h1>)}
       {!walletConnected && (
         <button onClick={connectWallet}>Connecter MetaMask</button>
       )}

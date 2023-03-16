@@ -5,7 +5,7 @@ pragma solidity ^0.8.13;
 import "../node_modules/@openzeppelin/contracts/access/Ownable.sol";
 
 contract Voting is Ownable {
-    uint256 public winningProposalID;
+    uint256 winningProposalID;
 
     struct Voter {
         bool isRegistered;
@@ -262,7 +262,6 @@ contract Voting is Ownable {
      * @notice Le statut de workflow doit être "session de vote terminée"
      * @notice Il suffit de lire winningProposalID pour obtenir l'ID de la proposition gagnante.
      */
-
     function tallyVotes() external onlyOwner {
         require(
             workflowStatus == WorkflowStatus.VotingSessionEnded,
@@ -274,5 +273,18 @@ contract Voting is Ownable {
             WorkflowStatus.VotingSessionEnded,
             WorkflowStatus.VotesTallied
         );
+    }
+    /** 
+     * @notice Retourne la proposition gagnante
+     * @return Id de la proposition
+    */
+    function getWinningProposalID()
+        external
+        view
+        returns (uint256 )
+    {
+        require(owner() == msg.sender || voters[msg.sender].isRegistered, "you are neither the owner nor a voter");   
+        require(workflowStatus == WorkflowStatus.VotesTallied, "Current status is not tallied vote");   
+        return winningProposalID;
     }
 }

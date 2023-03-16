@@ -8,6 +8,7 @@ const EthContext = createContext();
 export function useEth() {
   const web3ModalRef = useRef();
   const [walletConnected, setWalletConnected] = useState(false);
+  const [walletInstalled, setWalletInstalled] = useState(false);
   const [workflowStatus, setWorkflowStatus] = useState(null);
   const [account, setAccount] = useState("");
   const [owner, setOwner] = useState("");
@@ -105,16 +106,22 @@ export function useEth() {
 
   // listen to accountsChanged and chainChanged events
   useEffect(() => {
-    async function listen(event, callback) {
-      window.ethereum.on(event, async function () {
-        callback();
-      });
+    if(typeof window.ethereum !== "undefined") {
+      setWalletInstalled(true);
+      async function listen(event, callback) {
+        window.ethereum.on(event, async function () {
+          callback();
+        });
+      }
+      async function connect() {
+        setWalletConnected(false);
+      }
+      listen("accountsChanged", connect);
+      listen("chainChanged", connect);
     }
-    async function connect() {
-      setWalletConnected(false);
+    else {
+      setWalletInstalled(false);
     }
-    listen("accountsChanged", connect);
-    listen("chainChanged", connect);
   }, []);
 
   return {
@@ -125,6 +132,7 @@ export function useEth() {
     owner,
     workflowStatus,
     walletConnected,
+    walletInstalled,
     getWorkFlowStatus,
   };
 }

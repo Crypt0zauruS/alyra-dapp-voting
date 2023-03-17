@@ -73,12 +73,8 @@ const Vote = ({ showToast }) => {
     try {
       const provider = await getProviderOrSigner();
       const contractInstance = await getContractInstance(provider);
-      console.log("???????????????????????");
-      console.log(provider);
-      console.log(contractInstance);
-      const winningProposal = await contractInstance.getWinningProposalID();
-      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-      console.log(winningProposal);
+      const winningProposal = await contractInstance.getWinningProposalID({
+        from: account});
       const winningProposalInfo = await getOneProposal(winningProposal);
       setWinning(winningProposalInfo);
       setWinningIndex(winningProposal);
@@ -159,7 +155,7 @@ const Vote = ({ showToast }) => {
       } else if (workflowStatus === 4) {
         showToast("Les votes sont terminés !");
       } else if (workflowStatus === 5) {
-        showToast("Le tallage a été effectué !");
+        showToast("Le décompte a été effectué !");
       }
     } catch (err) {
       console.log(err);

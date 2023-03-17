@@ -34,7 +34,7 @@ export default function Home() {
           className="text-center"
           style={{ color: "lightgray", marginTop: "20px" }}
         >
-          {!walletInstalled && "Veuillez Installer MetaMAsk"}
+          {!walletInstalled && "Veuillez Installer MetaMask"}
           {walletInstalled &&  "Veuillez connecter votre Wallet"}
         </h1>
       )}

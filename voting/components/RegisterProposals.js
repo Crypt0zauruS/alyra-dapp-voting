@@ -95,6 +95,7 @@ const RegisterProposals = ({ showToast }) => {
               title="lettres, chiffres, ' - . ! , ? et espaces uniquement"
               onChange={(e) => setProposal(e.target.value)}
               value={proposal}
+              disabled={workflowStatus !== 1 || loader}
             />
             <button
               disabled={workflowStatus !== 1 || loader}

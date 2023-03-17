@@ -26,7 +26,7 @@ const Header = () => {
     "Terminer l'enregistrement des propositions",
     "Début de la session de vote",
     "Session de vote terminée",
-    "Tallage",
+    "Décompte des votes",
     "Session terminée",
   ];
 
@@ -135,7 +135,7 @@ const Header = () => {
       {account && walletConnected && (
         <h1>Actuellement : {WFSarray[workflowStatus]}</h1>
       )}
-      {(!account && walletConnected && <h1>Veuillez déverrouiller MetaMAsk</h1>)}
+      {(!account && walletConnected && <h1>Veuillez déverrouiller MetaMask</h1>)}
       {!walletConnected && (
         <button onClick={connectWallet}>Connecter MetaMask</button>
       )}

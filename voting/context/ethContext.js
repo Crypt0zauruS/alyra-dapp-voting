@@ -147,6 +147,7 @@ export function EthProvider({ children }) {
     owner,
     workflowStatus,
     walletConnected,
+    walletInstalled,
     getWorkFlowStatus,
   } = useEth();
 
@@ -160,6 +161,7 @@ export function EthProvider({ children }) {
         owner,
         workflowStatus,
         walletConnected,
+        walletInstalled,
         getWorkFlowStatus,
       }}
     >

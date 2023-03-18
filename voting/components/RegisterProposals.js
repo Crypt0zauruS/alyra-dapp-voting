@@ -2,18 +2,25 @@ import { useEthContext } from "../context/ethContext";
 import { useState, useEffect } from "react";
 import Loader from "./Loader";
 
+// Component to register proposals
 const RegisterProposals = ({ showToast }) => {
+
+  //Extract necessary values from the ethContext
   const { getProviderOrSigner, getContractInstance, account, workflowStatus } =
     useEthContext();
 
+  // Define the state variables
   const [proposal, setProposal] = useState("");
   const [authorized, setAuthorized] = useState(false);
   const [loader, setLoader] = useState(false);
 
+  // Function to check if the current account is authorized to make a proposal
   const checkIfVoter = async () => {
     try {
+      // Get provider and contract instance
       const provider = await getProviderOrSigner();
       const contractInstance = await getContractInstance(provider);
+      // Get Voter Informations for current user from smart contract
       await contractInstance.getVoter(account, {
         from: account,
       });
@@ -47,8 +54,10 @@ const RegisterProposals = ({ showToast }) => {
     }
     try {
       setLoader(true);
+      // Get signer and contract instance
       const provider = await getProviderOrSigner(true);
       const contractInstance = await getContractInstance(provider);
+      // Send addProposal transaction to the smart contract
       const tx = await contractInstance.addProposal(proposalDescription);
       showToast("Enregistrement de la proposition...");
       // Listen to the event emitted by the contract
@@ -67,6 +76,7 @@ const RegisterProposals = ({ showToast }) => {
     }
   };
 
+  // Call checkIfVoter() when account or workflowStatus changes
   useEffect(() => {
     checkIfVoter();
     // eslint-disable-next-line react-hooks/exhaustive-deps

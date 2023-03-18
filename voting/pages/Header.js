@@ -4,6 +4,7 @@ import { ethers } from "ethers";
 import Loader from "..//components/Loader";
 
 const Header = () => {
+  //Extract necessary values from the ethContext
   const {
     connectWallet,
     getProviderOrSigner,
@@ -16,10 +17,12 @@ const Header = () => {
     getWorkFlowStatus,
   } = useEthContext();
 
+  // Define the state variables
   const [voter, setVoter] = useState("");
   const [voterInfos, setVoterInfos] = useState([]);
   const [loader, setLoader] = useState(false);
 
+  // Array that maps the workflow status to a human-readable string
   const WFSarray = [
     "Enregistrement des votants",
     "Enregistrement des propositions",
@@ -30,6 +33,7 @@ const Header = () => {
     "Session terminée",
   ];
 
+  // Function to get voter information
   const getVoterInfo = async () => {
     if (loader) return;
     if (voter === "") return;
@@ -37,17 +41,21 @@ const Header = () => {
       setVoter("");
       return;
     }
+    //If the input is not a valid Ethereum address, set the voter state to 'Invalid address' and exit the function
     if (!ethers.utils.isAddress(voter)) {
       console.log("adresse invalide");
       setVoter("Adresse invalide");
       return;
     }
     try {
+      // Get provider and contract instance
       const provider = await getProviderOrSigner();
       const contractInstance = await getContractInstance(provider);
+      // Get Voter information from smart contract
       const voterInfo = await contractInstance.getVoter(voter, {
         from: account,
       });
+      //Set the voterInfo state with the retrieved information
       setVoterInfos(voterInfo);
     } catch (err) {
       console.error(err);
@@ -55,6 +63,7 @@ const Header = () => {
     }
   };
 
+  // Function to update the workflow status
   const setWorkflowStatus = async (index) => {
     if (loader) return;
     if (!/^\d+$/.test(index) || index > 5 || index < 1) {
@@ -62,10 +71,13 @@ const Header = () => {
       return;
     }
     try {
+      // Set the loader to active
       setLoader(true);
+      // Get signer and contract instance
       const provider = await getProviderOrSigner(true);
       const contractInstance = await getContractInstance(provider);
       let tx;
+      // Call the appropriate function based on the index
       if (index === 1) {
         tx = await contractInstance.startProposalsRegistering();
       } else if (index === 2) {
@@ -77,6 +89,7 @@ const Header = () => {
       } else if (index === 5) {
         tx = await contractInstance.tallyVotes();
       }
+      // Listen for the WorkflowStatusChange event emitted by the contract
       contractInstance.once(
         "WorkflowStatusChange",
         (previoussStatus, newStatus, event) => {
@@ -90,6 +103,7 @@ const Header = () => {
           );
         }
       );
+      // Wait for the transaction to be confirmed
       await tx.wait();
       await getWorkFlowStatus();
     } catch (err) {

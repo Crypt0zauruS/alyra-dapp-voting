@@ -3,7 +3,10 @@ import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import Loader from "./Loader";
 
+// RegisterVoters component
 const RegisterVoters = ({ showToast }) => {
+
+  // Get data from the ethContext
   const {
     getProviderOrSigner,
     getContractInstance,
@@ -12,6 +15,7 @@ const RegisterVoters = ({ showToast }) => {
     owner,
   } = useEthContext();
 
+  // Define state variables
   const [address, setAddress] = useState("");
   const [loader, setLoader] = useState(false);
 
@@ -19,6 +23,7 @@ const RegisterVoters = ({ showToast }) => {
   const registerVoter = async (address) => {
     if (loader) return;
     if (workflowStatus !== 0) return;
+    // Check if address is a valide Ethereum address
     if (!ethers.utils.isAddress(address)) {
       console.log("adresse invalide");
       showToast("Adresse invalide", true);
@@ -27,7 +32,9 @@ const RegisterVoters = ({ showToast }) => {
     try {
       setLoader(true);
       const provider = await getProviderOrSigner(true);
+       // Get contract instance
       const contractInstance = await getContractInstance(provider);
+      // Add voter to contract
       const tx = await contractInstance.addVoter(address);
       showToast("Enregistrement du votant...");
       // listen to contract event

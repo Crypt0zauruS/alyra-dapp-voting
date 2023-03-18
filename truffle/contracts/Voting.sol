@@ -52,8 +52,6 @@ contract Voting is Ownable {
      * @dev Initialise le contrat en créant le premier votant (le propriétaire du contrat).
      * @notice Comme précisé dans la consigne, il faut que le propriétaire du contrat puisse
      * aussi voir la proposition gagnante à la fin du vote (le "tout le monde"):
-     * winningProposalID est publique mais pour accéder à la description et au nombre de voix de la
-     * proposition gagnante, il faut être votant.
      * Ceci est une sécurité de la fonction getOneProposal() qui ne peut être appelée que par un votant.
      * Autant donc que le propriétaire du contrat soit aussi votant dès le déploiement du contrat.
      * Je pense aussi que le propriétaire du contrat doit pouvoir voir toutes les propositions, tout
@@ -73,7 +71,6 @@ contract Voting is Ownable {
      * @notice Cette fonction ne peut être appelée que par un votant.
      * @return Voter Les informations du votant.
      */
-
     function getVoter(
         address _addr
     ) external view onlyVoters returns (Voter memory) {
@@ -119,7 +116,6 @@ contract Voting is Ownable {
      * @param _desc Description de la proposition à ajouter.
      * @notice Cette fonction ne peut être appelée que par un votant.
      */
-
     function addProposal(string calldata _desc) external onlyVoters {
         require(
             workflowStatus == WorkflowStatus.ProposalsRegistrationStarted,
@@ -148,7 +144,6 @@ contract Voting is Ownable {
      * de la proposition gagnante à chaque vote: ceci afin d'éviter de boucler sur proposalsArray lors de tallyvotes()
      * pour se prémunir de l'attaque DoS Gas Limit.
      */
-
     function setVote(uint256 _proposalId) external onlyVoters {
         require(
             workflowStatus == WorkflowStatus.VotingSessionStarted,
@@ -179,7 +174,6 @@ contract Voting is Ownable {
      * @notice Le statut de workflow doit être "enregistrement des votants".
      * @notice Cette fonction crée une proposition initiale avec la description "GENESIS".
      */
-
     function startProposalsRegistering() external onlyOwner {
         require(
             workflowStatus == WorkflowStatus.RegisteringVoters,
@@ -202,7 +196,6 @@ contract Voting is Ownable {
      * @notice Cette fonction ne peut être appelée que par le propriétaire du contrat.
      * @notice Le statut de workflow doit être "enregistrement des propositions".
      */
-
     function endProposalsRegistering() external onlyOwner {
         require(
             workflowStatus == WorkflowStatus.ProposalsRegistrationStarted,
@@ -222,7 +215,6 @@ contract Voting is Ownable {
      * @notice Cette fonction ne peut être appelée que par le propriétaire du contrat.
      * @notice Le statut de workflow doit être "enregistrement des propositions terminé".
      */
-
     function startVotingSession() external onlyOwner {
         require(
             workflowStatus == WorkflowStatus.ProposalsRegistrationEnded,
@@ -241,7 +233,6 @@ contract Voting is Ownable {
      * @notice Le statut de workflow doit être "session de vote commencée".
      * @notice Le gagnant est la proposition qui a obtenu le plus de votes.
      */
-
     function endVotingSession() external onlyOwner {
         require(
             workflowStatus == WorkflowStatus.VotingSessionStarted,
@@ -260,7 +251,7 @@ contract Voting is Ownable {
      * @dev Cette fonction stoppe la session de vote.
      * @notice Cette fonction ne peut être appelée que par le propriétaire du contrat
      * @notice Le statut de workflow doit être "session de vote terminée"
-     * @notice Il suffit de lire winningProposalID pour obtenir l'ID de la proposition gagnante.
+     * @notice Cette étape rend possible la consultation de winningProposalID pour obtenir l'ID de la proposition gagnante.
      */
     function tallyVotes() external onlyOwner {
         require(
@@ -275,7 +266,8 @@ contract Voting is Ownable {
         );
     }
     /** 
-     * @notice Retourne la proposition gagnante
+     * @dev Retourne la proposition gagnante
+     * @notice Cette fonction ne peut être appelée que par le propriétaire du contrat ou un Voter 
      * @return Id de la proposition
     */
     function getWinningProposalID()

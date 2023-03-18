@@ -3,9 +3,13 @@ import { useState, useEffect } from "react";
 import Loader from "./Loader";
 import Image from "next/image";
 
+// Vote component
 const Vote = ({ showToast }) => {
+  // Get data from the ethContext
   const { getProviderOrSigner, getContractInstance, account, workflowStatus } =
     useEthContext();
+
+  // Define state variables
   const [proposals, setProposals] = useState([]);
   const [proposal, setProposal] = useState(0);
   const [authorized, setAuthorized] = useState(false);
@@ -14,17 +18,23 @@ const Vote = ({ showToast }) => {
   const [loader, setLoader] = useState(false);
   const [loaderVote, setLoaderVote] = useState(false);
 
+  // Method to handle voting on a proposal
   const vote = async () => {
+    // Check if user is already voting or fetching data
     if (loaderVote || loader) return;
+    // Check if voting is allowed at this workflow step
     if (workflowStatus !== 3) return;
+    // Check if user is authorized to vote
     if (!authorized) {
       showToast("Vous n'êtes pas un votant", true);
       return;
     }
+    // Check if there are any proposals to vote on
     if (proposals.length === 0) {
       showToast("Aucune proposition", true);
       return;
     }
+    // Check if selected proposal is valid
     if (
       !/^[0-9]{1,3}$/.test(proposal) ||
       proposal === "" ||
@@ -37,13 +47,17 @@ const Vote = ({ showToast }) => {
     }
     try {
       setLoaderVote(true);
+      // Get signer and contract instance
       const provider = await getProviderOrSigner(true);
       const contractInstance = await getContractInstance(provider);
+      // Send Vote transaction to the smart contract
       const tx = await contractInstance.setVote(proposal);
       showToast("Enregistrement du vote...");
+      // Listen for the 'Voted' event emitted by the smart contract
       contractInstance.once("Voted", (from, proposal, event) => {
         console.log("event", event, "from", from, "proposal", proposal);
       });
+      // Wait for the transaction to be mined
       await tx.wait();
       showToast("Vote enregistré !");
     } catch (err) {
@@ -54,10 +68,13 @@ const Vote = ({ showToast }) => {
     }
   };
 
+  // Method to get information about a single proposal
   const getOneProposal = async (proposalId) => {
     try {
+      // Get provider and contract instance
       const provider = await getProviderOrSigner();
       const contractInstance = await getContractInstance(provider);
+      // Get the proposal infos from the smart contract
       const proposalInfo = await contractInstance.getOneProposal(proposalId, {
         from: account,
       });
@@ -67,15 +84,21 @@ const Vote = ({ showToast }) => {
     }
   };
 
+  // This function retrieves the ID of the winning proposal and sets its information in the state variables
   const winningProposal = async () => {
+    // Check if the voting session has ended (workflowStatus is 5 or greater)
     if (workflowStatus < 5) return;
     setLoader(true);
     try {
+      // Get provider and contract instance
       const provider = await getProviderOrSigner();
       const contractInstance = await getContractInstance(provider);
+      // Get the ID of the winning proposal from the smart contract
       const winningProposal = await contractInstance.getWinningProposalID({
         from: account});
+      // Get informations of the winning proposal
       const winningProposalInfo = await getOneProposal(winningProposal);
+      // Set the winning proposal's information in the state variables
       setWinning(winningProposalInfo);
       setWinningIndex(winningProposal);
     } catch (err) {
@@ -85,26 +108,31 @@ const Vote = ({ showToast }) => {
     }
   };
 
+  // This function retrieves all proposals and sets their information in the state variables
   const getProposals = async () => {
     try {
+      // Get provider and contract instance
       const provider = await getProviderOrSigner();
       const contractInstance = await getContractInstance(provider);
       // query all proposals based on event name
       const allProposals = await contractInstance.queryFilter(
         contractInstance.filters.ProposalRegistered()
       );
+      // Get the information of each proposal
       const proposalsInfo = await Promise.all(
         allProposals.map(async (proposal) => {
           const proposalInfo = await getOneProposal(proposal.args.proposalId);
           return proposalInfo;
         })
       );
+      // Set the proposals' information in the state variables
       setProposals(proposalsInfo);
     } catch (err) {
       console.error(err);
     }
   };
 
+  // This function displays the list of proposals in the UI
   const displayProposals = () => {
     if (!authorized) return;
     if (proposals.length === 0)
@@ -140,16 +168,22 @@ const Vote = ({ showToast }) => {
     });
   };
 
+  // This function checks if the user is authorized to vote
   const checkIfVoter = async () => {
     try {
       setLoader(true);
+      // Get provider and contract instance
       const provider = await getProviderOrSigner();
       const contractInstance = await getContractInstance(provider);
+      // Get Voter Informations
       await contractInstance.getVoter(account, {
         from: account,
       });
+      // Set authorized to true and get proposals
       setAuthorized(true);
       await getProposals();
+
+      // Show toast message depending on workflow status
       if (workflowStatus === 3) {
         showToast("Bienvenue à la session de vote !");
       } else if (workflowStatus === 4) {

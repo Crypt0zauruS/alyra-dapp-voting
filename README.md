@@ -6,15 +6,15 @@ Nous avons utilisé **Truffle** pour le développement, le test et le déploieme
 
 ## Utilisation immédiate
 
-- Si vous voulez juste voir notre travail sans manipulations, rendez-vous sur le lien suivant :
+- Si vous voulez juste voir notre travail sans manipulations, rendez-vous sur le lien suivant : https://alyra-dapp-voting-project3-vkfe.vercel.app/
 
 - L'application vous y attend déjà avec un contrat de vote déployé sur Goerli.
 - Il faudra nous contacter en nous envoyant votre adresse Goerli pour que nous puissions vous transférer le ownership du contrat de vote.
-- Sinon vous pouvez toujours visualiser la video de démonstration de l'application ici:
+- Sinon vous pouvez toujours visualiser la video de démonstration de l'application ici: https://youtu.be/i4EAGARgePk
 
 ## Installation
 
-- Cloner le dépôt gitHub
+- Cloner le dépôt gitHub : https://github.com/Crypt0zauruS/alyra-dapp-voting.git
 - Installer les dépendances dans les 2 dossiers (truffle et voting)
 
 ```sh

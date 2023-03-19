@@ -3,17 +3,21 @@ import { providers, Contract } from "ethers";
 import Web3Modal from "web3modal";
 import Voting from "../contracts/Voting.json";
 
+// Create an EthContext
 const EthContext = createContext();
 
+// Create a custom hook to use EthContext
 export function useEth() {
   const web3ModalRef = useRef();
   const [walletConnected, setWalletConnected] = useState(false);
+  const [walletInstalled, setWalletInstalled] = useState(false);
   const [workflowStatus, setWorkflowStatus] = useState(null);
   const [account, setAccount] = useState("");
   const [owner, setOwner] = useState("");
   const { abi, networks } = Voting;
   const [contractAddress, setContractAddress] = useState("");
 
+  // function to get a signer or provider
   const getProviderOrSigner = async (needSigner = false) => {
     try {
       const provider = await web3ModalRef.current.connect();
@@ -25,7 +29,10 @@ export function useEth() {
           "Merci de vous connecter au réseau Goerli ou Ganache !"
         );
       }
+      // define contract address for the connected network
       setContractAddress(networks[chainId].address);
+
+      // Return the signer or provider, depending on the value of needSigner
       if (needSigner) {
         const signer = web3Provider.getSigner();
         return signer;
@@ -36,6 +43,7 @@ export function useEth() {
     }
   };
 
+  // Get a contract instance
   const getContractInstance = async (providerOrSigner) => {
     return new Contract(contractAddress, abi, providerOrSigner);
   };
@@ -105,16 +113,22 @@ export function useEth() {
 
   // listen to accountsChanged and chainChanged events
   useEffect(() => {
-    async function listen(event, callback) {
-      window.ethereum.on(event, async function () {
-        callback();
-      });
+    if(typeof window.ethereum !== "undefined") {
+      setWalletInstalled(true);
+      async function listen(event, callback) {
+        window.ethereum.on(event, async function () {
+          callback();
+        });
+      }
+      async function connect() {
+        setWalletConnected(false);
+      }
+      listen("accountsChanged", connect);
+      listen("chainChanged", connect);
     }
-    async function connect() {
-      setWalletConnected(false);
+    else {
+      setWalletInstalled(false);
     }
-    listen("accountsChanged", connect);
-    listen("chainChanged", connect);
   }, []);
 
   return {
@@ -125,11 +139,12 @@ export function useEth() {
     owner,
     workflowStatus,
     walletConnected,
+    walletInstalled,
     getWorkFlowStatus,
   };
 }
 
-// function ETHProvider
+// Ethereum provider component
 export function EthProvider({ children }) {
   const {
     connectWallet,
@@ -139,9 +154,11 @@ export function EthProvider({ children }) {
     owner,
     workflowStatus,
     walletConnected,
+    walletInstalled,
     getWorkFlowStatus,
   } = useEth();
 
+  // Export the imported variables and functions via the EthContext provider
   return (
     <EthContext.Provider
       value={{
@@ -152,6 +169,7 @@ export function EthProvider({ children }) {
         owner,
         workflowStatus,
         walletConnected,
+        walletInstalled,
         getWorkFlowStatus,
       }}
     >

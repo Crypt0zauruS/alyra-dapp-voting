@@ -5,7 +5,7 @@ import RegisterProposals from "../components/RegisterProposals";
 import Vote from "../components/Vote";
 
 export default function Home() {
-  const { workflowStatus, account } = useEthContext();
+  const { workflowStatus, account, walletInstalled } = useEthContext();
 
   const showToast = (message, type = false) => {
     if (!type) {
@@ -34,7 +34,8 @@ export default function Home() {
           className="text-center"
           style={{ color: "lightgray", marginTop: "20px" }}
         >
-          Veuillez connecter votre Wallet
+          {!walletInstalled && "Veuillez Installer MetaMask"}
+          {walletInstalled &&  "Veuillez connecter votre Wallet"}
         </h1>
       )}
     </div>
